@@ -17,7 +17,7 @@ server_host = input('Enter server\'s IP address:')
 
 # input field to enter a username
 name = input('Enter Client\'s name: ')
-port = 1235
+port = 5050
 print('Trying to connect to the server: {}, ({})'.format(server_host, port))
 
 # time.sleep(1)
@@ -46,7 +46,7 @@ while True:
 
     # Type QUIT to disconnect from chat
     if message == "QUIT!":
-        message = "left the Chat room"
+        message = "Left the Chat room"
         soc.send(message.encode())
         print("\n")
         break

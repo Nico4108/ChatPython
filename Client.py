@@ -2,6 +2,7 @@ import time, socket, sys
 
 print('Starting Client Server...')
 
+m = 0
 # time.sleep(1)
 
 # Get the hostname, IP Address from socket and set Port
@@ -17,7 +18,7 @@ server_host = input('Enter server\'s IP address:')
 
 # input field to enter a username
 name = input('Enter Client\'s name: ')
-port = 5050
+port = 5052
 print('Trying to connect to the server: {}, ({})'.format(server_host, port))
 
 # time.sleep(1)
@@ -40,9 +41,10 @@ while True:
     # receives messages from server using .recv and making it readable using .decode
     message = soc.recv(1024)
     message = message.decode()
-    print(server_name, ">", message)
+    print(server_name, message)
     # input field to response
-    message = input(str("Me > "))
+    m += 1
+    message = input(str("Me " + "["+str(m) + "] " + " > "))
 
     # Type QUIT to disconnect from chat
     if message == "QUIT!":

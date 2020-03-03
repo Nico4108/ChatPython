@@ -9,7 +9,7 @@ m = 0
 soc = socket.socket()
 host_name = socket.gethostname()
 ip = socket.gethostbyname(host_name)
-port = 5050
+port = 5052
 soc.bind((host_name, port))
 print(host_name, '({})'.format(ip))
 
@@ -47,7 +47,7 @@ connection.send(name.encode())
 # Loop to check for messages
 while True:
     m += 1
-    message = "["+str(m)+ "] " + "I AM A SERVER"
+    message = "["+str(m)+ "] " + "> " +"I AM A SERVER"
 
     # Type QUIT to disconnect from chat
     if message == 'QUIT!':
@@ -64,4 +64,4 @@ while True:
     message = connection.recv(1024)
     message = message.decode()
     # Prints name and the messages typed
-    print(client_name, '>', message)
+    print(client_name, message)

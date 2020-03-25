@@ -1,12 +1,13 @@
-import time, socket, sys
+import socket, sys
+
 # https://www.tutorialspoint.com/simple-chat-room-using-python
 print('Setup Server...')
 
+# Besked counter
 m = 0
-# time.sleep(1)
 
 # Get the hostname, IP Address from socket and set Port
-soc = socket.socket()
+soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 host_name = socket.gethostname()
 ip = socket.gethostbyname(host_name)
 port = 5052
@@ -14,7 +15,7 @@ soc.bind((host_name, port))
 print(host_name, '({})'.format(ip))
 
 # input field to enter a username
-#name = input('Enter name: ')
+# name = input('Enter name: ')
 name = "Server"
 
 # .listen try to locate a client connection using a socket
@@ -47,7 +48,7 @@ connection.send(name.encode())
 # Loop to check for messages
 while True:
     m += 1
-    message = "["+str(m)+ "] " + "> " +"I AM A SERVER"
+    message = "[" + str(m) + "] " + "> " + "I AM A SERVER"
 
     # Type QUIT to disconnect from chat
     if message == 'QUIT!':

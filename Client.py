@@ -1,12 +1,12 @@
-import time, socket, sys
+import socket, sys
 
 print('Starting Client Server...')
 
+# Besked counter
 m = 0
-# time.sleep(1)
 
 # Get the hostname, IP Address from socket and set Port
-soc = socket.socket()
+soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 shost = socket.gethostname()
 ip = socket.gethostbyname(shost)
 
@@ -20,8 +20,6 @@ server_host = input('Enter server\'s IP address:')
 name = input('Enter Client\'s name: ')
 port = 5052
 print('Trying to connect to the server: {}, ({})'.format(server_host, port))
-
-# time.sleep(1)
 
 # using '.connect' to connect to the server after getting the IP address and port number
 soc.connect((server_host, port))

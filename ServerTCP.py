@@ -7,7 +7,7 @@ print('Setup Server...')
 m = 0
 
 # Get the hostname, IP Address from socket and set Port
-soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+soc = socket.socket(socket.AF_INET)
 host_name = socket.gethostname()
 ip = socket.gethostbyname(host_name)
 port = 5052

@@ -19,6 +19,11 @@ s_addr = (lc, port)
 soc.bind(s_addr)
 print(name, s_addr)
 
+sent = soc.recvfrom(5000)
+
+# Use .recv to get the clients username and prints it
+c_name = soc.recv(5000)
+print(c_name.decode(), ':', ' has connected.')
 
 # Loop to check for messages
 while True:
@@ -26,7 +31,7 @@ while True:
     print('\nWaiting to receive message from Client:')
     # Cmessages is the clients input and where it is stored and then printed
     Cmessages, address = soc.recvfrom(5000)
-    print(Cmessages.decode())
+    print(c_name.decode(), ':', Cmessages.decode())
 
     if Cmessages:
         # The server sends back a automated reply using .sendto and .encode to convert it to bytes.

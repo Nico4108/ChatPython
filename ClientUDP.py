@@ -25,14 +25,24 @@ sent = soc.sendto('Connection Request send'.encode(), s_addr)
 # Input field for username on client side
 name = input('Enter unsername: ')
 print('{} has joined...'.format(name))
-# Using .sendto to send username to server (doesn't work fully yet!)
-soc.sendto(name.encode(), s_addr)
+# Using .sendto to send username to server
+sent = soc.sendto(name.encode(), s_addr)
 
 # Loop to check for messages
 while True:
 
     message = input('\nEnter Messages: ')
-    print(name,':', '{!r}'.format(message), m)
+    print('[', m, '] ', name, ':', message)
+
+    # Type QUIT to disconnect from chat
+    if message == "QUIT!":
+        # Use .sendto to send a messages to the server telling it that the client has disconnected
+        message = "LEFT THE CHAT ROOM!!"
+        soc.sendto(message.encode(), s_addr)
+        print("GOODBYE!")
+        # Terminates class
+        break
+
     # Sends out messages to server using .sendto and using .encode to convert it to bytes.
     sentMessages = soc.sendto(message.encode(), s_addr)
     # Adds 1 to messages send
@@ -40,5 +50,7 @@ while True:
 
     # Receives messages from server using .recv and making it readable using .decode
     Smessages, server = soc.recvfrom(5000)
-    print('Server Responds: {}'.format(Smessages.decode()), m)
+    print('[', m, '] ', 'Server Responds: {}'.format(Smessages.decode()))
     m += 1
+
+

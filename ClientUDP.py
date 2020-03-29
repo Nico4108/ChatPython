@@ -16,49 +16,60 @@ port = 5052
 # Setting the server address to localhost
 s_addr = (lc, port)
 
-com = "com -"
-msg = "msg -"
-res = "res -"
-
-# printing the information from server
-print(com, mc, '<{}>'.format(ip))
-
+Ccom = "C: com -"
+Scom = "S: com -"
 
 # Using .sendto to let the server know it wants to connect
-sent = soc.sendto('{}'.format((ip)).encode(), s_addr)
+sent = soc.sendto('{}'.format(ip).encode(), s_addr)
 
+accpt, address = soc.recvfrom(5000)
 
-# Input field for username on client side
-name = input('Enter unsername: ')
-print('{} has joined...'.format(name))
-# Using .sendto to send username to server
-sent = soc.sendto(name.encode(), s_addr)
-
-# Loop to check for messages
 while True:
+    if accpt == b'accepted by the server!':
 
-    message = input('\nEnter Messages: ')
+        #print('You have been', accpt.decode())
 
-    if mc != mc+1 & mc-1:
-        print(msg, mc, name, ':', message)
+        sentaccpt = soc.sendto(Ccom.encode(), s_addr)
 
-    # Type QUIT to disconnect from chat
-    if message == "QUIT!":
-        # Use .sendto to send a messages to the server telling it that the client has disconnected
-        message = "LEFT THE CHAT ROOM!!"
-        soc.sendto(message.encode(), s_addr)
-        print("GOODBYE!")
-        # Terminates class
+        # Input field for username on client side
+        name = input('Enter unsername: ')
+        print('{} has joined...'.format(name))
+        # Using .sendto to send username to server
+        sent = soc.sendto(name.encode(), s_addr)
+
+        # Loop to check for messages
+        while True:
+
+            message = input('\nEnter Messages: ')
+
+            # Checks to make sure messages counter is legal
+            if mc != mc + 1 & mc - 1:
+                print(name, ':', message)
+
+            else:
+                print('Messages counter ERROR!')
+                break
+
+            # Type QUIT to disconnect from chat
+            if message == "QUIT!":
+                # Use .sendto to send a messages to the server telling it that the client has disconnected
+                message = "LEFT THE CHAT ROOM!!"
+                soc.sendto(message.encode(), s_addr)
+                print("GOODBYE!")
+                exit()
+                # Terminates class
+
+            # Sends out messages to server using .sendto and using .encode to convert it to bytes.
+            sentMessages = soc.sendto(message.encode(), s_addr)
+            # Adds 1 to messages send
+            mc += 1
+
+
+            # Receives messages from server using .recv and making it readable using .decode
+            Smessages, server = soc.recvfrom(5000)
+            print('{}'.format(Smessages.decode()))
+            mc += 1
+
+    else:
+        print('You were not accepted by server, goodbye!')
         break
-
-    # Sends out messages to server using .sendto and using .encode to convert it to bytes.
-    sentMessages = soc.sendto(message.encode(), s_addr)
-    # Adds 1 to messages send
-    mc += 1
-
-    # Receives messages from server using .recv and making it readable using .decode
-    Smessages, server = soc.recvfrom(5000)
-    print(res, mc, ':', '{}'.format(Smessages.decode()))
-    mc += 1
-
-

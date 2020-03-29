@@ -5,10 +5,18 @@ print('Setup Server...')
 # Server name
 name = "The Coolest Server on : "
 
+Ccom = "C: com -"
+Scom = "S: com -"
+msg = "msg -"
+res = "res -"
+
+mc = 0
+
 # Creating a UPD socket using .SOCK_DGRAM and sets Port number
 soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 port = 5052
 lc = 'LocalHost'
+ip = socket.gethostbyname(lc)
 # Setting the server address to localhost and what port it's running on
 s_addr = (lc, port)
 # Using .bind to 'bind' the server to the socket
@@ -18,31 +26,38 @@ print(name, s_addr)
 print("Waiting for Client connections....")
 sent = soc.recv(5000)
 
+# Receives IP address from client
 C_ip = sent.decode()
 
+print(Ccom, mc,'<{}>'.format(C_ip))
+
+# Split IP address
 nsent = sent.decode().split('.', 3)
 
-print(nsent)
-
-print(nsent[0], nsent[1], nsent[2], nsent[3])
-
+# Converts IP from str to int
 firstIPNumber = (int(nsent[0]))
 secoundIPNumber = (int(nsent[1]))
 thirdIPNumber = (int(nsent[2]))
 fourthIPNumber = (int(nsent[3]))
 
-print(firstIPNumber, secoundIPNumber, thirdIPNumber, fourthIPNumber)
+# Checks if received IP address is legal
+if (0 <= firstIPNumber <= 255) and (0 <= secoundIPNumber <= 255) and (0 <= thirdIPNumber <= 255) and (0 <= fourthIPNumber <= 255):
 
-if (firstIPNumber <= 255) and (secoundIPNumber <= 255) and (thirdIPNumber <= 255) and (fourthIPNumber <= 255):
+    print(Scom, mc, 'Accept', '<{}>'.format(ip))
 
-    print('Client IP address found:', C_ip)
+    # Sends back a accpted messages to client using .sendto
+    accpt, address = soc.recvfrom(5000)
+    accpt = soc.sendto('accepted by the server!'.encode(), address)
+
+    aceptsent = soc.recv(5000)
+    print(aceptsent.decode(), mc, 'Accept')
 
 else:
     print("No good ip")
 
 # Use .recv to get the clients username and prints it
 c_name = soc.recv(5000)
-print(c_name.decode(), ':', ' has connected.')
+print(Scom, mc, c_name.decode(), ':', 'has connected.')
 
 # Loop to check for messages
 while True:
@@ -50,7 +65,8 @@ while True:
     print('\nWaiting to receive message from Client:')
     # Cmessages is the clients input and where it is stored and then printed
     Cmessages, address = soc.recvfrom(5000)
-    print(c_name.decode(), ':', Cmessages.decode())
+    print(msg, mc, c_name.decode(), ':', Cmessages.decode())
+    print(res, mc, 'I AM A SERVER!')
 
     if Cmessages:
         # The server sends back a automated reply using .sendto and .encode to convert it to bytes.

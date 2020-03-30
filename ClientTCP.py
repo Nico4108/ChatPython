@@ -52,3 +52,12 @@ while True:
         break
     # Using .send to send out the message in bytes(encode) to server
     soc.send(message.encode())
+
+    # Type QUIT to disconnect from chat
+    if message == "QUIT!":
+        # Use .sendto to send a messages to the server telling it that the client has disconnected
+        message = "LEFT THE CHAT ROOM!!"
+        ##soc.sendto(message.encode(), s_addr)
+        print("GOODBYE!")
+        # Terminates class
+        exit()

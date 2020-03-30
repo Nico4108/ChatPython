@@ -18,6 +18,7 @@ s_addr = (lc, port)
 
 Ccom = "C: com -"
 Scom = "S: com -"
+msg = "msg"
 
 # Using .sendto to let the server know it wants to connect
 sent = soc.sendto('{}'.format(ip).encode(), s_addr)
@@ -25,9 +26,9 @@ sent = soc.sendto('{}'.format(ip).encode(), s_addr)
 accpt, address = soc.recvfrom(5000)
 
 while True:
-    if accpt == b'accepted by the server!':
+    if accpt.startswith(b'accepted'):
 
-        #print('You have been', accpt.decode())
+        # print('You have been', accpt.decode(), 'by the server!')
 
         sentaccpt = soc.sendto(Ccom.encode(), s_addr)
 
@@ -41,14 +42,7 @@ while True:
         while True:
 
             message = input('\nEnter Messages: ')
-
-            # Checks to make sure messages counter is legal
-            if mc != mc + 1 & mc - 1:
-                print(name, ':', message)
-
-            else:
-                print('Messages counter ERROR!')
-                break
+            print(name, ':', message)
 
             # Type QUIT to disconnect from chat
             if message == "QUIT!":
@@ -56,18 +50,17 @@ while True:
                 message = "LEFT THE CHAT ROOM!!"
                 soc.sendto(message.encode(), s_addr)
                 print("GOODBYE!")
-                exit()
                 # Terminates class
+                exit()
 
             # Sends out messages to server using .sendto and using .encode to convert it to bytes.
             sentMessages = soc.sendto(message.encode(), s_addr)
             # Adds 1 to messages send
             mc += 1
 
-
             # Receives messages from server using .recv and making it readable using .decode
             Smessages, server = soc.recvfrom(5000)
-            print('{}'.format(Smessages.decode()))
+            print('Server :', '{}'.format(Smessages.decode()))
             mc += 1
 
     else:

@@ -1,4 +1,11 @@
+import multiprocessing
 import socket
+import threading
+from configparser import ConfigParser
+
+# Field to read and get config file
+parser = ConfigParser()
+parser.read('con.ini')
 
 # Creating a UPD socket using .SOCK_DGRAM
 soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -11,47 +18,134 @@ port = 5052
 s_addr = (lc, port)
 # Messages counter
 mc = 0
-_3whs = False
+max_pack = parser.getboolean('Maximum', 'Start')
 
-try:
 
-    # first com-0 conncetion send to server
-    con_requ = 'com-' + str(mc) + ' ' + ip
-    # Using .sendto to let the server know it wants to connect
-    sent_con_requ = soc.sendto(con_requ.encode(), s_addr)
+# Heartbeat function
+def heartbeat():
 
-    info, server = soc.recvfrom(4096)
-    # get com-0 accept from server
-    info_string = info.decode()
-    ip_split = info_string.replace('com-0 accept ', '')
-    s_ip = ip_split
-    # Checks it messages contains 'com-0 accept' and that the IP is valid
-    if "com-0 accept" in info_string and socket.inet_aton(s_ip):
-        client_accept = 'com-' + str(mc) + ' accept'
-        sent = soc.sendto(client_accept.encode(), s_addr)
-        _3whs = True
+    if heartbeat_:
+        # i as interval in seconds
+        threading.Timer(parser.getint('Heartbeat', 'Time'), heartbeat).start()
+        # put your action here
+        hb_msg = 'con-h 0x00'
+        hb_msg_sent = soc.sendto(hb_msg.encode(), s_addr)
 
-finally:
-    # If connection to server not accepted close
-    if not _3whs:
-        print('SOCKET ERROR!')
+    else:
+        print("Heartbeat not activated")
         soc.close()
         exit()
 
-# loop for messages
-while _3whs:
-    message = input('Enter message: ')
-    msg = 'msg-' + str(mc) + '=' + message
-    # Sends first 'msg-' message to server
-    sent_msg = soc.sendto(msg.encode(), s_addr)
-    # Receive message from server
-    resp, server = soc.recvfrom(4096)
-    server_resp = resp.decode()
-    check_mc = int(server_resp[4])
-    mc = (int(server_resp[4]) + 1)
-    # Checks if msg counter in 'res-0' is valid
-    if mc - check_mc == 1 and 'res-' in server_resp:
-        # Gets output from server and prints it
-        print(server_resp[6:])
-    else:
-        print('Msg counter ERROR')
+
+# 3 way handshake function
+def handshake():
+    try:
+
+        # first com-0 conncetion send to server
+        con_requ = 'com-' + str(mc) + ' ' + ip
+        # Using .sendto to let the server know it wants to connect
+        sent_con_requ = soc.sendto(con_requ.encode(), s_addr)
+
+        info, server = soc.recvfrom(4096)
+        # get com-0 accept from server
+        info_string = info.decode()
+        ip_split = info_string.replace('com-0 accept ', '')
+        s_ip = ip_split
+        # Checks it messages contains 'com-0 accept' and that the IP is valid
+        if "com-0 accept" in info_string and socket.inet_aton(s_ip):
+            client_accept = 'com-' + str(mc) + ' accept'
+            sent = soc.sendto(client_accept.encode(), s_addr)
+            # Checks if max packages it set to False in config file
+            if not parser.getboolean('Maximum', 'Start'):
+                global heartbeat_
+                # Sets heartbeat_ field to status from config (true or false)
+                heartbeat_ = parser.getboolean('Heartbeat', 'KeepALive')
+                # Calls heartbeat
+                heartbeat()
+                # Check if heartbeat timer is equal to correct time (3 seconds) in config file
+                # and calls the proper function
+                if parser.getint('Heartbeat', 'Time') == 3:
+                    messagesLoop()
+                else:
+                    listenForMsg()
+            else:
+                heartbeat_ = parser.getboolean('Heartbeat', 'KeepALive')
+                heartbeat()
+                maxpackages()
+
+    finally:
+        # If connection to server not accepted close
+        if messagesLoop() == False and parser.getboolean('Maximum', 'Start') == False:
+            print('SOCKET ERROR!')
+            soc.close()
+            exit()
+
+
+# function that only listens for msg from server
+def listenForMsg():
+
+        while True:
+            resp, server = soc.recvfrom(4096)
+            server_resp = resp.decode()
+            # Check for proper msg received and sends back inactivity msg to client and closes client socket
+            if 'con-res ' in server_resp:
+                    print(server_resp)
+                    _4_sec_msg = 'con-res 0xFF'
+                    _4_sec = soc.sendto(_4_sec_msg.encode(), s_addr)
+                    print('Disconnected for inactivity')
+                    global heartbeat_
+                    heartbeat_ = False
+                    soc.close()
+                    exit()
+
+            else:
+                print("Msg Error!")
+
+# function with loop for messages
+def messagesLoop():
+
+        while True:
+            message = input('Enter message: ')
+            global mc
+            msg = 'msg-' + str(mc) + '=' + message
+            # Sends first 'msg-' message to server
+            sent_msg = soc.sendto(msg.encode(), s_addr)
+            # Receive message from server
+            resp, server = soc.recvfrom(4096)
+            server_resp = resp.decode()
+            # Checks the proper msg received
+            if 'res-' in server_resp:
+                check_mc = (int(server_resp[4]))
+                mc = (int(server_resp[4]) + 1)
+                # Checks if msg counter in 'res-0' is valid
+                if mc - check_mc == 1 and 'res-' in server_resp:
+                    # Gets output from server and prints it
+                    print(server_resp[6:])
+
+            else:
+                print('Msg counter ERROR')
+
+# Function for max packages sent
+def maxpackages():
+    while max_pack:
+
+        print("teståst")
+        # Loop to send amount from config file of msg to server
+        for x in range(parser.getint('Maximum', 'MaximumPackages')):
+            msg = 'msg-' + str(mc) + '='
+
+            # Uses multiprocessing to send x amount of msg to server
+            mp = multiprocessing.Process(target=soc.sendto, args=(msg.encode(), s_addr))
+            mp.start()
+
+        # Receives response from from server and closes client socket
+        resp, server = soc.recvfrom(4096)
+        server_resp = resp.decode()
+        print(server_resp)
+        global heartbeat_
+        heartbeat_ = False
+        soc.close()
+        break
+
+
+handshake()

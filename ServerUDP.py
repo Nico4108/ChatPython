@@ -9,10 +9,12 @@ ip = socket.gethostbyname(socket.gethostname())
 s_addr = (lc, port)
 # Using .bind to 'bind' the server to the socket
 soc.bind(s_addr)
+soc.settimeout(4)
+packages_count = 0
 
 
+# Function for 3 way handshake
 def _3whs_connection():
-
     # First connection form client received 'com-0'
     info, address = soc.recvfrom(4096)
     first_info = info.decode()
@@ -29,36 +31,74 @@ def _3whs_connection():
         # Third 'com-0' messages received from client
         info2, address = soc.recvfrom(4096)
         if 'com-0 accept' in info2.decode():
+
             print(info2.decode())
             _1st_msg_checkup()
+
     else:
-        print('Msg counter ERROR')
+        print('Msg counter ERROR 1')
 
 
 # Function check if first message is valid by 'msg-0'
 def _1st_msg_checkup():
-    message, address = soc.recvfrom(4096)
-    message_from_client = message.decode()
-    # Checks if message from client contains 'msg-0'
-    if 'msg-0' in message_from_client:
-        # Gives and sets the messages from client to next Functions(messages_sent) parameter
-        messages_sent(message_from_client, address)
-        msg_fnkt()
-    else:
-        print('Msg counter ERROR')
+    global address
+    try:
+        message, address = soc.recvfrom(4096)
+        message_from_client = message.decode()
+
+        # Checks if message from client contains 'msg-0'
+        if 'msg-0' in message_from_client:
+            # Gives and sets the messages from client to next Functions(messages_sent) parameter
+            messages_sent(message_from_client, address)
+            msg_fnkt()
+        # Checks if message from client contains 'con-h' for heartbeat
+        elif 'con-h ' in message_from_client:
+            messages_sent(message_from_client, address)
+            msg_fnkt()
+        else:
+            print('Msg counter ERROR 2')
+
+    # If no messages received before 4 seconds disconnect client
+    except socket.timeout:
+
+        _4_sec_inactive_msg = 'con-res 0xFE'
+        _4_sec_inactive_resp = soc.sendto(_4_sec_inactive_msg.encode(), address)
+
+        messages_4_sec_inactive, address = soc.recvfrom(4096)
+        _4_sec_inactive_resp_client = messages_4_sec_inactive.decode()
+        print("Client disconnected for inactivity " + _4_sec_inactive_resp_client)
+        soc.close()
+        exit()
 
 
 # Function for sending automated reply to client
 def messages_sent(msg_from_client, c_address):
-    check_mc = int(msg_from_client[4])
-    mc = (int(msg_from_client[4]) + 1)
-    # Checks if msg counter in 'msg-0' is valid
-    if mc - check_mc == 1 and 'msg-' in msg_from_client:
-        reply = 'res-' + str(mc) + '=I am server'
-        # Automated reply 'I am server' send back to client
-        respond_to_client = soc.sendto(reply.encode(), c_address)
+    if 'msg-' in msg_from_client:
+        check_mc = (int(msg_from_client[4]))
+        mc = (int(msg_from_client[4]) + 1)
+        # Checks if msg counter in 'msg-0' is valid
+        if mc - check_mc == 1 and 'msg-' in msg_from_client:
+            reply = 'res-' + str(mc) + '=I am server'
+            # Automated reply 'I am server' send back to client
+            respond_to_client = soc.sendto(reply.encode(), c_address)
+
+    elif 'con-h ' in msg_from_client:
+        print('client alive: ' + msg_from_client)
+
+    # Checks if message from client contains 'com-' from max packages
+    elif 'com-' in msg_from_client:
+        global packages_count
+        packages_count += 1
+        print(msg_from_client)
+        if packages_count >= 25:
+            _max_pac = 'Maximum 25 packages allowed'
+            _max_pac_resp = soc.sendto(_max_pac.encode(), address)
+            soc.close()
+            exit()
+
     else:
-        print('Msg counter ERROR')
+        print(msg_from_client)
+        print('Msg counter ERROR 3')
 
 
 # Receive and read client message and send it to Function(messages_sent)
@@ -67,9 +107,7 @@ def msg_fnkt():
         messages, address = soc.recvfrom(4096)
         # Receive and decodes client message
         msg_from_client = messages.decode()
-        # Send message to get Checked
         messages_sent(msg_from_client, address)
 
 
 _3whs_connection()
-

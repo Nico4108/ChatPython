@@ -1,4 +1,5 @@
 import socket
+import datetime
 
 # Creating a UPD socket using .SOCK_DGRAM and sets Port number
 soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -11,6 +12,7 @@ s_addr = (lc, port)
 soc.bind(s_addr)
 soc.settimeout(4)
 packages_count = 0
+dt = datetime.datetime.now()
 
 
 # Function for 3 way handshake
@@ -31,6 +33,10 @@ def _3whs_connection():
         # Third 'com-0' messages received from client
         info2, address = soc.recvfrom(4096)
         if 'com-0 accept' in info2.decode():
+
+            f = open('Log.txt', 'a')
+            f.write("Handshake successful : " + str(dt) + " : " + c_ip + "\n")
+            f.close()
 
             print(info2.decode())
             _1st_msg_checkup()

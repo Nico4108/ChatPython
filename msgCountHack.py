@@ -1,4 +1,3 @@
-import multiprocessing
 import socket
 import threading
 from configparser import ConfigParser
@@ -16,8 +15,8 @@ lc = 'LocalHost'
 port = 5052
 # Setting the server address to localhost
 s_addr = (lc, port)
-# Messages counter
-mc = 0
+# Messages counter sat to 1 to test if handshake and msg are available
+mc = 1
 max_pack = parser.getboolean('Maximum', 'Start')
 
 
@@ -66,12 +65,6 @@ def handshake():
                 # and calls the proper function
                 if parser.getint('Heartbeat', 'Time') == 3:
                     messagesLoop()
-                else:
-                    listenForMsg()
-            else:
-                heartbeat_ = parser.getboolean('Heartbeat', 'KeepALive')
-                heartbeat()
-                maxpackages()
 
     finally:
         # If connection to server not accepted close
@@ -79,27 +72,6 @@ def handshake():
             print('SOCKET ERROR!')
             soc.close()
             exit()
-
-
-# function that only listens for msg from server
-def listenForMsg():
-
-        while True:
-            resp, server = soc.recvfrom(4096)
-            server_resp = resp.decode()
-            # Check for proper msg received and sends back inactivity msg to client and closes client socket
-            if 'con-res ' in server_resp:
-                    print(server_resp)
-                    _4_sec_msg = 'con-res 0xFF'
-                    _4_sec = soc.sendto(_4_sec_msg.encode(), s_addr)
-                    print('Disconnected for inactivity')
-                    global heartbeat_
-                    heartbeat_ = False
-                    soc.close()
-                    exit()
-
-            else:
-                print("Msg Error!")
 
 # function with loop for messages
 def messagesLoop():
@@ -124,27 +96,6 @@ def messagesLoop():
 
             else:
                 print('Msg counter ERROR')
-
-# Function for max packages sent
-def maxpackages():
-    while max_pack:
-
-        # Loop to send amount from config file of msg to server
-        for x in range(parser.getint('Maximum', 'MaximumPackages')):
-            msg = 'msg-' + str(mc) + '='
-
-            # Uses multiprocessing to send x amount of msg to server
-            mp = multiprocessing.Process(target=soc.sendto, args=(msg.encode(), s_addr))
-            mp.start()
-
-        # Receives response from from server and closes client socket
-        resp, server = soc.recvfrom(4096)
-        server_resp = resp.decode()
-        print(server_resp)
-        global heartbeat_
-        heartbeat_ = False
-        soc.close()
-        break
 
 
 handshake()

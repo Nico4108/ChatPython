@@ -12,6 +12,7 @@ s_addr = (lc, port)
 soc.bind(s_addr)
 soc.settimeout(4)
 packages_count = 0
+#check_mc = 0
 dt = datetime.datetime.now()
 
 
@@ -42,7 +43,15 @@ def _3whs_connection():
             _1st_msg_checkup()
 
     else:
-        print('Msg counter ERROR 1')
+        # 3WHE = 3 whay handshake error
+        handshakeError = '3WHE'
+        soc.sendto(handshakeError.encode(), address)
+        print('3 way Handshake ERROR')
+
+        f = open('Log.txt', 'a')
+        f.write("Handshake unsuccessful : " + str(dt) + " : " + c_ip + "\n")
+        f.close()
+        #_3whs_connection()
 
 
 # Function check if first message is valid by 'msg-0'
@@ -80,13 +89,16 @@ def _1st_msg_checkup():
 # Function for sending automated reply to client
 def messages_sent(msg_from_client, c_address):
     if 'msg-' in msg_from_client:
+        #global check_mc
         check_mc = (int(msg_from_client[4]))
         mc = (int(msg_from_client[4]) + 1)
         # Checks if msg counter in 'msg-0' is valid
         if mc - check_mc == 1 and 'msg-' in msg_from_client:
             reply = 'res-' + str(mc) + '=I am server'
+            check_mc += 2
             # Automated reply 'I am server' send back to client
             respond_to_client = soc.sendto(reply.encode(), c_address)
+
 
     elif 'con-h ' in msg_from_client:
         print('client alive: ' + msg_from_client)

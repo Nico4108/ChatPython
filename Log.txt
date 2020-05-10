@@ -2,3 +2,98 @@
 Handshake successful: 2020-05-08 11:01:47.316668
 Handshake successful: 2020-05-08 11:02:59.870036 192.168.1.153
 Handshake successful: 2020-05-08 11:03:36.819129 : 192.168.1.153
+Handshake unsuccessful : 2020-05-10 12:17:27.391166 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 12:22:31.096163 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:34:53.050413 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:40:51.711064 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:40:51.711064 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:40:51.711064 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:40:51.711064 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:40:51.711064 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:48:55.187996 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:51:07.305839 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:52:29.306855 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:52:50.829819 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:54:13.477313 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:54:40.229827 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 13:58:33.406668 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 14:10:45.039884 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 14:14:23.652495 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 14:17:18.171633 : con-h 0x00
+Handshake successful : 2020-05-10 17:12:39.046921 : 192.168.1.153
+Handshake successful : 2020-05-10 17:14:06.812950 : 192.168.1.153
+Handshake successful : 2020-05-10 17:15:12.975205 : 192.168.1.153
+Handshake successful : 2020-05-10 17:15:32.662194 : 192.168.1.153
+Handshake successful : 2020-05-10 17:16:19.285692 : 192.168.1.153
+Handshake successful : 2020-05-10 17:17:14.213754 : 192.168.1.153
+Handshake successful : 2020-05-10 17:18:01.816389 : 192.168.1.153
+Handshake successful : 2020-05-10 17:18:17.650245 : 192.168.1.153
+Handshake successful : 2020-05-10 17:19:43.456877 : 192.168.1.153
+Handshake successful : 2020-05-10 17:20:11.485888 : 192.168.1.153
+Handshake successful : 2020-05-10 17:21:34.204059 : 192.168.1.153
+Handshake successful : 2020-05-10 17:22:57.238206 : 192.168.1.153
+Handshake successful : 2020-05-10 17:23:24.927019 : 192.168.1.153
+Handshake successful : 2020-05-10 17:24:43.028989 : 192.168.1.153
+Handshake successful : 2020-05-10 17:24:43.028989 : 192.168.1.153
+Handshake successful : 2020-05-10 17:25:08.549301 : 192.168.1.153
+Handshake successful : 2020-05-10 17:25:23.428096 : 192.168.1.153
+Handshake successful : 2020-05-10 17:31:33.608027 : 192.168.1.153
+Handshake successful : 2020-05-10 17:32:21.399946 : 192.168.1.153
+Handshake unsuccessful : 2020-05-10 17:33:36.376411 : com-10 192.168.1.153
+Handshake successful : 2020-05-10 17:34:48.339629 : 192.168.1.153
+Handshake successful : 2020-05-10 17:36:27.726599 : 192.168.1.153
+Handshake successful : 2020-05-10 17:37:11.657587 : 192.168.1.153
+Handshake successful : 2020-05-10 17:38:43.928306 : 192.168.1.153
+Handshake successful : 2020-05-10 17:39:03.994994 : 192.168.1.153
+Handshake successful : 2020-05-10 17:45:30.195003 : 192.168.1.153
+Handshake successful : 2020-05-10 17:47:45.887374 : 192.168.1.153
+Handshake successful : 2020-05-10 17:48:12.499691 : 192.168.1.153
+Handshake successful : 2020-05-10 17:49:16.638669 : 192.168.1.153
+Handshake successful : 2020-05-10 17:50:04.730643 : 192.168.1.153
+Handshake successful : 2020-05-10 17:50:43.190579 : 192.168.1.153
+Handshake successful : 2020-05-10 17:51:22.226256 : 192.168.1.153
+Handshake successful : 2020-05-10 17:52:54.295242 : 192.168.1.153
+Handshake unsuccessful : 2020-05-10 17:53:17.238537 : con-h 0x00
+Handshake successful : 2020-05-10 17:53:17.238537 : 192.168.1.153
+Handshake successful : 2020-05-10 17:53:29.188609 : 192.168.1.153
+Handshake successful : 2020-05-10 17:55:18.225266 : 192.168.1.153
+Handshake successful : 2020-05-10 17:56:21.891194 : 192.168.1.153
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : com-1 192.168.1.153
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:57:32.727233 : msg-1=f
+Handshake unsuccessful : 2020-05-10 17:58:27.103537 : com-1 192.168.1.153
+Handshake successful : 2020-05-10 17:58:54.594193 : 192.168.1.153
+Handshake unsuccessful : 2020-05-10 18:02:30.825298 : com-1 192.168.1.153
+Handshake successful : 2020-05-10 18:02:45.971757 : 192.168.1.153
+Handshake successful : 2020-05-10 18:04:12.569826 : 192.168.1.153
+Handshake successful : 2020-05-10 18:04:42.412606 : 192.168.1.153
+Handshake successful : 2020-05-10 18:07:01.895239 : 192.168.1.153
+Handshake successful : 2020-05-10 18:08:24.454500 : 192.168.1.153
+Handshake successful : 2020-05-10 18:09:46.311781 : 192.168.1.153
+Handshake successful : 2020-05-10 18:10:07.636610 : 192.168.1.153
+Handshake successful : 2020-05-10 18:10:43.547224 : 192.168.1.153
+Handshake successful : 2020-05-10 18:13:35.941080 : 192.168.1.153
+Handshake successful : 2020-05-10 18:22:46.232974 : 192.168.1.153
+Handshake successful : 2020-05-10 18:29:11.709464 : 192.168.1.153
+Handshake successful : 2020-05-10 18:30:01.079111 : 192.168.1.153
+Handshake successful : 2020-05-10 18:33:36.373229 : 192.168.1.153
+Handshake successful : 2020-05-10 18:34:55.295768 : 192.168.1.153
+Handshake successful : 2020-05-10 18:35:30.429166 : 192.168.1.153
+Handshake successful : 2020-05-10 18:36:49.066177 : 192.168.1.153
+Handshake successful : 2020-05-10 18:37:31.058484 : 192.168.1.153
+Handshake successful : 2020-05-10 18:38:03.432859 : 192.168.1.153
+Handshake unsuccessful : 2020-05-10 18:38:32.576222 : com-1 192.168.1.153
+Handshake unsuccessful : 2020-05-10 18:41:38.731842 : con-h 0x00
+Handshake successful : 2020-05-10 18:42:06.076499 : 192.168.1.153
+Handshake successful : 2020-05-10 18:44:00.413524 : 192.168.1.153
+Handshake successful : 2020-05-10 18:46:24.673858 : 192.168.1.153
+Handshake successful : 2020-05-10 18:46:44.545519 : 192.168.1.153
+Handshake successful : 2020-05-10 18:47:15.393430 : 192.168.1.153

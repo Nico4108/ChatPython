@@ -97,3 +97,10 @@ Handshake successful : 2020-05-10 18:44:00.413524 : 192.168.1.153
 Handshake successful : 2020-05-10 18:46:24.673858 : 192.168.1.153
 Handshake successful : 2020-05-10 18:46:44.545519 : 192.168.1.153
 Handshake successful : 2020-05-10 18:47:15.393430 : 192.168.1.153
+Handshake successful : 2020-05-10 21:14:33.939883 : 192.168.1.153
+Handshake successful : 2020-05-10 21:15:02.321107 : 192.168.1.153
+Handshake unsuccessful : 2020-05-10 21:51:07.325700 : com-1 192.168.1.153
+Handshake successful : 2020-05-10 21:51:26.447407 : 192.168.1.153
+Handshake unsuccessful : 2020-05-10 21:55:56.708802 : con-h 0x00
+Handshake unsuccessful : 2020-05-10 21:56:26.161479 : com-1 192.168.1.153
+Handshake successful : 2020-05-10 21:56:40.800976 : 192.168.1.153

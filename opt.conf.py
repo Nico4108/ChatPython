@@ -12,5 +12,5 @@ config['Maximum'] = {
     'Start': 'false'
 }
 
-with open('con.ini', 'w'), as configfile:
+with open('con.ini', 'w') as configfile:
     config.write(configfile)

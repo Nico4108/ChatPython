@@ -95,7 +95,7 @@ def messages_sent(msg_from_client, c_address):
         # Checks if msg counter in 'msg-0' is valid
         if mc - check_mc == 1 and 'msg-' in msg_from_client:
             reply = 'res-' + str(mc) + '=I am server'
-            check_mc += 2
+            #check_mc += 2
             # Automated reply 'I am server' send back to client
             respond_to_client = soc.sendto(reply.encode(), c_address)
 

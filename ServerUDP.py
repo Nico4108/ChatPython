@@ -1,5 +1,6 @@
 import socket
 import datetime
+import re
 
 # Creating a UPD socket using .SOCK_DGRAM and sets Port number
 soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -12,7 +13,7 @@ s_addr = (lc, port)
 soc.bind(s_addr)
 soc.settimeout(4)
 packages_count = 0
-#check_mc = 0
+mc = 1
 dt = datetime.datetime.now()
 
 
@@ -26,14 +27,15 @@ def _3whs_connection():
     ip_split = first_info.replace('com-0 ', '')
     c_ip = ip_split
     # Checks if messages received contains 'com-0' and if IP is valid
-    if "com-0" in first_info and socket.inet_aton(c_ip):
+    if first_info.startswith('com-0') and socket.inet_aton(c_ip):
         server_accepts_client = 'com-0 accept' + ' ' + ip
         # Sends back 'com-0 accept' to client
         sent = soc.sendto(server_accepts_client.encode(), address)
         print(server_accepts_client)
         # Third 'com-0' messages received from client
         info2, address = soc.recvfrom(4096)
-        if 'com-0 accept' in info2.decode():
+
+        if info2.decode().startswith('com-0 accept'):
 
             f = open('Log.txt', 'a')
             f.write("Handshake successful : " + str(dt) + " : " + c_ip + "\n")
@@ -62,16 +64,17 @@ def _1st_msg_checkup():
         message_from_client = message.decode()
 
         # Checks if message from client contains 'msg-0'
-        if 'msg-0' in message_from_client:
+        if message_from_client.startswith('msg-0'):
             # Gives and sets the messages from client to next Functions(messages_sent) parameter
             messages_sent(message_from_client, address)
             msg_fnkt()
         # Checks if message from client contains 'con-h' for heartbeat
-        elif 'con-h ' in message_from_client:
+        elif message_from_client.startswith('con-h'):
             messages_sent(message_from_client, address)
             msg_fnkt()
         else:
             print('Msg counter ERROR 2')
+
 
     # If no messages received before 4 seconds disconnect client
     except socket.timeout:
@@ -88,35 +91,43 @@ def _1st_msg_checkup():
 
 # Function for sending automated reply to client
 def messages_sent(msg_from_client, c_address):
-    if 'msg-' in msg_from_client:
-        #global check_mc
-        check_mc = (int(msg_from_client[4]))
-        mc = (int(msg_from_client[4]) + 1)
-        # Checks if msg counter in 'msg-0' is valid
-        if mc - check_mc == 1 and 'msg-' in msg_from_client:
-            reply = 'res-' + str(mc) + '=I am server'
-            #check_mc += 2
+
+    if msg_from_client.startswith('msg-'):
+        c_msg1, c_msg2 = msg_from_client.split('=')
+        c_msg3, c_msg4 = c_msg1.split('-')
+        global mc
+        reply = 'res-' + str(mc) + '=I am server'
+        if mc - int(c_msg4) == 1 and msg_from_client.startswith('msg-'):
             # Automated reply 'I am server' send back to client
             respond_to_client = soc.sendto(reply.encode(), c_address)
+            mc += 2
+        else:
+            print('Msg counter ERROR 3')
+            m_e = 'Msg counter ERROR 3'
+            soc.sendto(m_e.encode(), c_address)
+            soc.close()
+            exit()
 
-
-    elif 'con-h ' in msg_from_client:
+    elif msg_from_client.startswith('con-h'):
         print('client alive: ' + msg_from_client)
 
     # Checks if message from client contains 'com-' from max packages
-    elif 'com-' in msg_from_client:
+    elif msg_from_client.startswith('com-'):
         global packages_count
         packages_count += 1
-        print(msg_from_client)
+        #print(msg_from_client)
         if packages_count >= 25:
             _max_pac = 'Maximum 25 packages allowed'
             _max_pac_resp = soc.sendto(_max_pac.encode(), address)
+            print('Server received over max limit packages!')
             soc.close()
             exit()
 
     else:
         print(msg_from_client)
         print('Msg counter ERROR 3')
+        soc.close()
+        exit()
 
 
 # Receive and read client message and send it to Function(messages_sent)

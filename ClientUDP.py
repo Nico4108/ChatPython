@@ -52,7 +52,7 @@ def handshake():
         ip_split = info_string.replace('com-0 accept ', '')
         s_ip = ip_split
         # Checks it messages contains 'com-0 accept' and that the IP is valid
-        if "com-0 accept" in info_string and socket.inet_aton(s_ip):
+        if info_string.startswith('com-0 accept') and socket.inet_aton(s_ip):
             client_accept = 'com-' + str(mc) + ' accept'
             sent = soc.sendto(client_accept.encode(), s_addr)
             # Checks if max packages it set to False in config file
@@ -88,7 +88,7 @@ def listenForMsg():
             resp, server = soc.recvfrom(4096)
             server_resp = resp.decode()
             # Check for proper msg received and sends back inactivity msg to client and closes client socket
-            if 'con-res ' in server_resp:
+            if server_resp.startswith('con-res '):
                     print(server_resp)
                     _4_sec_msg = 'con-res 0xFF'
                     _4_sec = soc.sendto(_4_sec_msg.encode(), s_addr)
@@ -100,6 +100,8 @@ def listenForMsg():
 
             else:
                 print("Msg Error!")
+                soc.close()
+                exit()
 
 # function with loop for messages
 def messagesLoop():
@@ -114,16 +116,20 @@ def messagesLoop():
             resp, server = soc.recvfrom(4096)
             server_resp = resp.decode()
             # Checks the proper msg received
-            if 'res-' in server_resp:
-                check_mc = (int(server_resp[4]))
-                mc = (int(server_resp[4]) + 1)
-                # Checks if msg counter in 'res-0' is valid
-                if mc - check_mc == 1 and 'res-' in server_resp:
+            if server_resp.startswith('res-'):
+                s_msg1, s_msg2 = server_resp.split('=')
+                s_msg3, s_msg4 = s_msg1.split('-')
+
+                if int(s_msg4) - mc == 1 and server_resp.startswith('res-'):
                     # Gets output from server and prints it
                     print(server_resp[6:])
+                    mc += 2
+
 
             else:
                 print('Msg counter ERROR')
+                soc.close()
+                exit()
 
 # Function for max packages sent
 def maxpackages():

@@ -80,10 +80,10 @@ def messagesLoop():
         server_resp = resp.decode()
         # Checks the proper msg received
         if server_resp.startswith('res-'):
-            s_msg1, s_msg2 = server_resp.split('=')
-            s_msg3, s_msg4 = s_msg1.split('-')
+            s_msg1 = server_resp.split('-')
+            s_msg2 = s_msg1[1].split('=')
 
-            if int(s_msg4) - mc == 1 and server_resp.startswith('res-'):
+            if int(s_msg2[0]) - mc == 1 and server_resp.startswith('res-'):
                 # Gets output from server and prints it
                 print(server_resp[6:])
                 mc += 2

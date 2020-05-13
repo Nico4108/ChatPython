@@ -52,7 +52,6 @@ def handshake():
         ip_split = info_string.replace('com-0 accept ', '')
         s_ip = ip_split
         # Checks it messages contains 'com-0 accept' and that the IP is valid
-        #if "com-0 accept" in info_string and socket.inet_aton(s_ip):
         if info_string.startswith('com-0 accept') and socket.inet_aton(s_ip):
             client_accept = 'com-' + str(mc) + ' accept'
             sent = soc.sendto(client_accept.encode(), s_addr)

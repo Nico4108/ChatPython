@@ -93,11 +93,11 @@ def _1st_msg_checkup():
 def messages_sent(msg_from_client, c_address):
 
     if msg_from_client.startswith('msg-'):
-        c_msg1, c_msg2 = msg_from_client.split('=')
-        c_msg3, c_msg4 = c_msg1.split('-')
+        c_msg1 = msg_from_client.split('-')
+        c_msg2 = c_msg1[1].split('=')
         global mc
         reply = 'res-' + str(mc) + '=I am server'
-        if mc - int(c_msg4) == 1 and msg_from_client.startswith('msg-'):
+        if mc - int(c_msg2[0]) == 1 and msg_from_client.startswith('msg-'):
             # Automated reply 'I am server' send back to client
             respond_to_client = soc.sendto(reply.encode(), c_address)
             mc += 2

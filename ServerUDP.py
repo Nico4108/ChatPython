@@ -11,7 +11,6 @@ ip = socket.gethostbyname(socket.gethostname())
 s_addr = (lc, port)
 # Using .bind to 'bind' the server to the socket
 soc.bind(s_addr)
-soc.settimeout(4)
 packages_count = 0
 mc = 1
 dt = datetime.datetime.now()
@@ -42,6 +41,7 @@ def _3whs_connection():
             f.close()
 
             print(info2.decode())
+            soc.settimeout(4)
             _1st_msg_checkup()
 
     else:

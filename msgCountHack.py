@@ -95,7 +95,7 @@ def messagesLoop():
 
                 if int(s_msg2[0]) - mct == 1 and server_resp.startswith('res-'):
                     # Gets output from server and prints it
-                    print(server_resp[6:])
+                    print(s_msg2[1])
                     mct += 2
 
                 else:
